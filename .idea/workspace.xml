@@ -30,8 +30,8 @@
       <recent name="C:\Users\Sophia\OneDrive - Middleton Grange School\2023\13DTC\AS 3.7 Programming\Exercises\Snake project" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.Snake_9">
-    <configuration name="Snake_4" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+  <component name="RunManager" selected="Python.Snake_10">
+    <configuration name="Snake_10" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="Snake project" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -43,7 +43,7 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Snake_4.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Snake_10.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -159,11 +159,11 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.Snake_10" />
         <item itemvalue="Python.Snake_9" />
         <item itemvalue="Python.Snake_8" />
         <item itemvalue="Python.Snake_7" />
         <item itemvalue="Python.Snake_6" />
-        <item itemvalue="Python.Snake_4" />
       </list>
     </recent_temporary>
   </component>

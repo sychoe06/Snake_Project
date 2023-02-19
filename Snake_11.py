@@ -1,5 +1,5 @@
 """Snake Version 6
-Adding an image as a sprite
+Adding a score
 """
 import pygame
 import random
