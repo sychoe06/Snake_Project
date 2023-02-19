@@ -1,5 +1,5 @@
 """Snake Version 6
-Modify the program to allow the user to click 'X' to quit
+Adding an image as a sprite
 """
 import pygame
 import random
@@ -25,6 +25,12 @@ msg_font = pygame.font.SysFont("arialblack", 20)
 clock = pygame.time.Clock()  # sets the speed at which the snake moves
 
 
+# Create snake - replaces the previous snake drawing section in main loop
+def draw_snake(snake_list):
+    for i in snake_list:
+        pygame.draw.rect(screen, red, [i[0], i[1], 20, 20])
+
+
 def message(msg, txt_colour, bkgd_colour):
     txt = msg_font.render(msg, True, txt_colour, bkgd_colour)
 
@@ -44,6 +50,8 @@ def game_loop():
 
     snake_x_change = 0  # holds the value of changes in the x-coordinate
     snake_y_change = 0  # holds the value of changes in the y-coordinate
+    snake_list = []
+    snake_length = 1
 
     # Setting a random position for the food - to start
     food_x = round(random.randrange(20, 1000 - 20) / 20) * 20
@@ -119,19 +127,47 @@ def game_loop():
 
         screen.fill(green)  # Changes screen (surface) from default black to green
 
-        # Create rectangle for snake
-        pygame.draw.rect(screen, red, [snake_x, snake_y, 20, 20])
-        pygame.display.update()
+        # Create snake (replaces simple rectangle in previous version)
+        snake_head = [snake_x, snake_y]
+        snake_list.append(snake_head)
+        if len(snake_list) > snake_length:
+            del snake_list[0]
+
+        for x in snake_list[:-1]:
+            if x == snake_head:
+                game_over = True
+
+        draw_snake(snake_list)
 
         # Create circle for food
-        pygame.draw.circle(screen, yellow, [food_x, food_y], 10)
+        food = pygame.Rect(food_x, food_y, 20, 20)
+        apple = pygame.image.load('apple_3.png').convert_alpha()
+        resized_apple = pygame.transform.smoothscale(apple, [20, 20])
+        screen.blit(resized_apple, food)
+
         pygame.display.update()
 
         # Collision detection (test if snake touches food)
-        if snake_x == food_x - 10 and snake_y == food_y - 10:
+        # Print lines are for testing
+        print(f"Snake x: {snake_x}")
+        print(f"Food x: {food_x}")
+        print(f"Snake y: {snake_y}")
+        print(f"Food y: {food_y}")
+        print("\n\n")
+
+        # NOTE: Radius is subtracted from food coordinates, otherwise it
+        # detects the edge of the snake and the centre of the food (circle) as
+        # the collision point
+        if snake_x == food_x and snake_y == food_y:
             # Set new random position for food if snake touches it
             food_x = round(random.randrange(20, 1000 - 20) / 20) * 20
-            food_y = round(random.randrange(20, 1000 - 20) / 20) * 20
+            food_y = round(random.randrange(20, 720 - 20) / 20) * 20
+
+            # For testing purposes
+            print("Got it!")
+
+            # Increase length of snake (by original size)
+            snake_length += 1
 
         clock.tick(5)  # sets the speed at which each iteration of the game loop
         # runs in frames per second (fps). In this case it is set to 5fps
