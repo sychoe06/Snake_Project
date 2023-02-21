@@ -1,4 +1,4 @@
-"""Snake Version 6
+"""Snake Version 8
 Modify the program to allow the user to click 'X' to quit
 """
 import pygame

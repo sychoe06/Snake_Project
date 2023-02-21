@@ -1,4 +1,4 @@
-"""Snake Version 6
+"""Snake Version 10
 Adding an image as a sprite
 """
 import pygame

@@ -1,7 +1,8 @@
-"""Snake Version 11
-Adding a score
+"""Snake Version 12 alt
+Developing snake speed
 """
 import pygame
+import time
 import random
 pygame.init()
 
@@ -48,6 +49,7 @@ def message(msg, txt_colour, bkgd_colour):
 
 # Function to run the main game loop
 def game_loop():
+    start_time = time.time()  # To record score (time) from start of game
     quit_game = False
     game_over = False
 
@@ -147,8 +149,14 @@ def game_loop():
         draw_snake(snake_list)
 
         # Keeping track of the player's score
-        score = snake_length - 1  # score excludes snake's head
+        score = round(time.time() - start_time)
         player_score(score, black)
+
+        # Link speed of snake to player score to increase difficulty
+        if score > 3:
+            speed = score
+        else:
+            speed = 3
 
         # Create circle for food
         food = pygame.Rect(food_x, food_y, 20, 20)
@@ -180,7 +188,7 @@ def game_loop():
             # Increase length of snake (by original size)
             snake_length += 1
 
-        clock.tick(5)  # sets the speed at which each iteration of the game loop
+        clock.tick(speed)  # sets the speed at which each iteration of the game loop
         # runs in frames per second (fps). In this case it is set to 5fps
 
     pygame.quit()

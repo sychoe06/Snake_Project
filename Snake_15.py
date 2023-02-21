@@ -1,5 +1,5 @@
-"""Snake Version 11
-Adding a score
+"""Snake Version 15
+Final version
 """
 import pygame
 import random
@@ -25,15 +25,48 @@ msg_font = pygame.font.SysFont("arialblack", 20)
 clock = pygame.time.Clock()  # sets the speed at which the snake moves
 
 
+# Function to keep track of the highest score - writes value to a file
+def load_high_score():
+    try:
+        hi_score_file = open("HI_score.txt", 'r')
+    except IOError:
+        hi_score_file = open("HI_score.txt", 'w')
+        hi_score_file.write("0")
+    hi_score_file = open("HI_score.txt", 'r')
+    value = hi_score_file.read()
+    hi_score_file.close()
+    return value
+
+
+# Function to update record of the highest score
+def update_high_score(score, high_score):
+    if int(score) > int(high_score):
+        return score
+    else:
+        return high_score
+
+
+# Save updated high score if player beats it
+def save_high_score(high_score):
+    high_score_file = open("HI_score.txt", 'w')
+    high_score_file.write(str(high_score))
+    high_score_file.close()
+
+
 # Display player score throughout the game
-def player_score(score, score_colour):
+def player_score(score, score_colour, hi_score):
     display_score = score_font.render(f"Score: {score}", True, score_colour)
     screen.blit(display_score, (800, 20))  # Coordinates for top right
+
+    # High score
+    display_score = score_font.render(f"High Score: {hi_score}", True,
+                                      score_colour)
+    screen.blit(display_score, (10, 10))  # Coordinates for top left
 
 
 # Create snake - replaces the previous snake drawing section in main loop
 def draw_snake(snake_list):
-    print(f"Snake list: {snake_list}")  # for testing purposes
+    # print(f"Snake list: {snake_list}")  # for testing purposes
     for i in snake_list:
         pygame.draw.rect(screen, red, [i[0], i[1], 20, 20])
 
@@ -64,9 +97,14 @@ def game_loop():
     food_x = round(random.randrange(20, 1000 - 20) / 20) * 20
     food_y = round(random.randrange(20, 720 - 20) / 20) * 20
 
+    # Load the high score
+    high_score = load_high_score()
+    # print(f"high_score test: {high_score}")  # For testing purposes only
+
     while not quit_game:
         # Give user the option to quit or play again when they die
         while game_over:
+            save_high_score(high_score)
             screen.fill(white)
             message("You died! Press 'Q' to Quit or 'A' to play Again",
                     black, white)
@@ -111,6 +149,11 @@ def game_loop():
                                 quit_game = True
                                 end = True
 
+                        # If user presses 'X' game quits
+                            if event.key == pygame.K_x:
+                                quit_game = True
+                                end = True
+
             # Handling snake movement
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_LEFT:
@@ -148,7 +191,16 @@ def game_loop():
 
         # Keeping track of the player's score
         score = snake_length - 1  # score excludes snake's head
-        player_score(score, black)
+        player_score(score, black, high_score)
+
+        # Get high score
+        high_score = update_high_score(score, high_score)
+
+        # Link speed of snake to player score to increase difficulty
+        if score > 3:
+            speed = score
+        else:
+            speed = 3
 
         # Create circle for food
         food = pygame.Rect(food_x, food_y, 20, 20)
@@ -160,11 +212,11 @@ def game_loop():
 
         # Collision detection (test if snake touches food)
         # Print lines are for testing
-        print(f"Snake x: {snake_x}")
-        print(f"Food x: {food_x}")
-        print(f"Snake y: {snake_y}")
-        print(f"Food y: {food_y}")
-        print("\n\n")
+        # print(f"Snake x: {snake_x}")
+        # print(f"Food x: {food_x}")
+        # print(f"Snake y: {snake_y}")
+        # print(f"Food y: {food_y}")
+        # print("\n\n")
 
         # NOTE: Radius is subtracted from food coordinates, otherwise it
         # detects the edge of the snake and the centre of the food (circle) as
@@ -175,12 +227,12 @@ def game_loop():
             food_y = round(random.randrange(20, 720 - 20) / 20) * 20
 
             # For testing purposes
-            print("Got it!")
+            # print("Got it!")
 
             # Increase length of snake (by original size)
             snake_length += 1
 
-        clock.tick(5)  # sets the speed at which each iteration of the game loop
+        clock.tick(speed)  # sets the speed at which each iteration of the game loop
         # runs in frames per second (fps). In this case it is set to 5fps
 
     pygame.quit()

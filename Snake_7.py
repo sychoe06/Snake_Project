@@ -1,4 +1,4 @@
-"""Snake Version 6
+"""Snake Version 7
 Ending the game
 """
 import pygame

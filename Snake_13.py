@@ -1,5 +1,5 @@
-"""Snake Version 11
-Adding a score
+"""Snake Version 13
+Reading and writing to a file
 """
 import pygame
 import random
@@ -23,6 +23,19 @@ exit_font = pygame.font.Font("freesansbold.ttf", 30)
 msg_font = pygame.font.SysFont("arialblack", 20)
 
 clock = pygame.time.Clock()  # sets the speed at which the snake moves
+
+
+# Function to keep track of the highest score - writes value to a file
+def load_high_score():
+    try:
+        hi_score_file = open("HI_score.txt", 'r')
+    except IOError:
+        hi_score_file = open("HI_score.txt", 'w')
+        hi_score_file.write("0")
+    hi_score_file = open("HI_score.txt", 'r')
+    value = hi_score_file.read()
+    hi_score_file.close()
+    return value
 
 
 # Display player score throughout the game
@@ -63,6 +76,10 @@ def game_loop():
     # Setting a random position for the food - to start
     food_x = round(random.randrange(20, 1000 - 20) / 20) * 20
     food_y = round(random.randrange(20, 720 - 20) / 20) * 20
+
+    # Load the high score
+    high_score = load_high_score()
+    print(f"high_score test: {high_score}")  # For testing purposes only
 
     while not quit_game:
         # Give user the option to quit or play again when they die
@@ -150,6 +167,12 @@ def game_loop():
         score = snake_length - 1  # score excludes snake's head
         player_score(score, black)
 
+        # Link speed of snake to player score to increase difficulty
+        if score > 3:
+            speed = score
+        else:
+            speed = 3
+
         # Create circle for food
         food = pygame.Rect(food_x, food_y, 20, 20)
         apple = pygame.image.load('apple_3.png').convert_alpha()
@@ -180,7 +203,7 @@ def game_loop():
             # Increase length of snake (by original size)
             snake_length += 1
 
-        clock.tick(5)  # sets the speed at which each iteration of the game loop
+        clock.tick(speed)  # sets the speed at which each iteration of the game loop
         # runs in frames per second (fps). In this case it is set to 5fps
 
     pygame.quit()

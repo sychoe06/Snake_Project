@@ -1,5 +1,5 @@
-"""Snake Version 11
-Adding a score
+"""Snake Version 12
+Changing snake speed
 """
 import pygame
 import random
@@ -150,6 +150,12 @@ def game_loop():
         score = snake_length - 1  # score excludes snake's head
         player_score(score, black)
 
+        # Link speed of snake to player score to increase difficulty
+        if score > 3:
+            speed = score
+        else:
+            speed = 3
+
         # Create circle for food
         food = pygame.Rect(food_x, food_y, 20, 20)
         apple = pygame.image.load('apple_3.png').convert_alpha()
@@ -180,7 +186,7 @@ def game_loop():
             # Increase length of snake (by original size)
             snake_length += 1
 
-        clock.tick(5)  # sets the speed at which each iteration of the game loop
+        clock.tick(speed)  # sets the speed at which each iteration of the game loop
         # runs in frames per second (fps). In this case it is set to 5fps
 
     pygame.quit()
